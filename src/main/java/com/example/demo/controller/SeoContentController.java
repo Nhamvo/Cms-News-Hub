@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -38,43 +40,37 @@ public class SeoContentController {
      public SeoContentRepository rs ;
 
     @GetMapping("/seo-content")
-    public ResponseEntity<List<SeoContent>> getAllSeoContents(){
-        return ResponseEntity.ok(seoContentService.getListSeoContent());
+    public Mono<ResponseEntity<List<SeoContent>>> getAllSeoContents(){
+        return Mono.just(ResponseEntity.ok(seoContentService.getListSeoContent()));
     }
+
     @PostMapping("/seo-content")
-    public ResponseEntity<SeoContent> createSeoContents(@RequestBody SeoContentRequest seoContentRequest){
-        SeoContent seoContentResuilt = seoContentService.createSeoContents(seoContentRequest);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/seo-content/" + seoContentResuilt.getSeoId()));
-        return new ResponseEntity<>(seoContentResuilt,httpHeaders, HttpStatus.CREATED);
+    public Mono<ResponseEntity<SeoContent>> createSeoContents(@RequestBody SeoContentRequest seoContentRequest){
+        return Mono.just(ResponseEntity.ok(seoContentService.createSeoContents(seoContentRequest)));
     }
 
 
     @PutMapping("/seo-content/{id}")
-    public ResponseEntity<SeoContent> updateSeoContent(@PathVariable Long id , @RequestBody SeoContentRequest seoContentRequest){
-       SeoContent seoContent = seoContentService.updateSeoContents(id,seoContentRequest);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/seo-content/" + seoContent.getSeoId()));
-        return new ResponseEntity<>(seoContent,httpHeaders,HttpStatus.CREATED);
+    public Mono<SeoContent> updateSeoContent(@PathVariable Long id , @RequestBody SeoContentRequest seoContentRequest){
+        return Mono.just(seoContentService.updateSeoContents(id,seoContentRequest));
     }
 
     @DeleteMapping("/seo-content/{id}")
-    public ResponseEntity<?> deleteSeoContentByid(@PathVariable Long id){
+    public Mono<ResponseEntity<?>> deleteSeoContentByid(@PathVariable Long id){
         Map<String, String> response = new HashMap<>();
-
         try {
             SeoContent seoContent = seoContentService.findSeoContentsById(id);
             if(seoContent==null){
                 response.put("message", "SeoConten does not exist");
-                return ResponseEntity.ok(response);
+                return Mono.just(ResponseEntity.ok(response));
             }
             seoContentService.deleteSeoContents(id);
             response.put("message", "SeoConten deleted successfully");
-            return ResponseEntity.ok(response);
+            return Mono.just(ResponseEntity.ok(response));
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body("article not found"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete user");
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete article"));
         }
     }
 

@@ -39,9 +39,10 @@ import java.util.stream.Collectors;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+
 public class SecurityConfig {
-    @Autowired
-    DataSource dataSource;
+//    @Autowired
+//    DataSource dataSource;
     @Autowired
     BasicFilter basicFilter;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -59,12 +60,7 @@ public class SecurityConfig {
                                 .requestMatchers("/**").hasAuthority("Admin")
 
                                 .anyRequest().authenticated()
-
-
                 )
-
-
-
                 // Cấu hình đăng nhập
                 .formLogin(formLogin ->
                         formLogin
@@ -117,7 +113,7 @@ public class SecurityConfig {
     }
     @Bean
     public AuthenticationManager authenticationManager(
-            UserDetailsServiceImpl userDetailsService,
+            UserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
@@ -125,12 +121,12 @@ public class SecurityConfig {
         return new ProviderManager(authenticationProvider);
     }
 
-    @Bean
-    public JdbcTokenRepositoryImpl persistentTokenRepository() {
-        JdbcTokenRepositoryImpl memory = new JdbcTokenRepositoryImpl();
-        memory.setDataSource(dataSource);
-        return memory;
-    }
+//    @Bean
+//    public JdbcTokenRepositoryImpl persistentTokenRepository() {
+//        JdbcTokenRepositoryImpl memory = new JdbcTokenRepositoryImpl();
+//        memory.setDataSource(dataSource);
+//        return memory;
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

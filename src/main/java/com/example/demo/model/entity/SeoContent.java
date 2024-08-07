@@ -28,7 +28,7 @@ public class SeoContent {
     private Article article;
 
 
-    @Column
+    @Column ( unique = true)
     private String metaTitle;
 
     @Column

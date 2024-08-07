@@ -1,6 +1,6 @@
 package com.example.demo.model.service.impl;
 
-import com.example.demo.config.SecurityConfig;
+//import com.example.demo.config.SecurityConfig;
 import com.example.demo.model.dto.UserRequest;
 import com.example.demo.model.entity.Category;
 import com.example.demo.model.entity.user.Role;
@@ -8,9 +8,14 @@ import com.example.demo.model.entity.user.User;
 import com.example.demo.model.repository.RoleRepository;
 import com.example.demo.model.repository.UserRepository;
 import com.example.demo.model.service.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Set;
@@ -39,10 +44,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUsers(UserRequest userRequest) {
+        String encodedPassword = passwordEncoder.encode(userRequest.getPassWord());
+
         User newUser = new User();
         newUser.setUserName(userRequest.getUserName());
         newUser.setEmail(userRequest.getUserName());
-        String encodedPassword = passwordEncoder.encode(userRequest.getPassWord());
 
         newUser.setPassWord(encodedPassword);
         Set<Role> roles = roleRepository.findAllById(userRequest.getRoles()).stream().collect(Collectors.toSet());
@@ -74,7 +80,25 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(userResuilt);
     }
 
+    ///////
+    @Transactional
+    public UserDetails loadUserByUsername(String username) {
+        User user = userRepository.findByUserName(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
 
+        // Chuyển đổi các vai trò thành SimpleGrantedAuthority
+        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+
+        // Trả về đối tượng UserDetails
+        return org.springframework.security.core.userdetails.User.withUsername(user.getUserName())
+                .password(user.getPassWord())
+                .authorities(authorities)
+                .build();
+    }
 
 
 }

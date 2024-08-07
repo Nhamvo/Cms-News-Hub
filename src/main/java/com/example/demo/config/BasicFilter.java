@@ -33,7 +33,6 @@ public class BasicFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Unauthorized");
             errorResponse.put("message", "You need to login to access this resource");
