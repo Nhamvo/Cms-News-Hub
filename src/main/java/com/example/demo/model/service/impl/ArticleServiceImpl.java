@@ -10,6 +10,7 @@ import com.example.demo.model.repository.CategoryRepository;
 import com.example.demo.model.repository.UserRepository;
 import com.example.demo.model.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ModelMapper modelMapper;
+
 
 
     @Override
@@ -38,16 +42,17 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article createArticle(ArticleRequest articleRequest) {
-        Article article = new Article();
-        article.setTitle(articleRequest.getTitle());
-        article.setContent(articleRequest.getContent());
-        // Tìm người viết bài
-        User author = userRepository.findById(articleRequest.getAuthor()).orElseThrow(() -> new RuntimeException("Author not found"));
-        article.setAuthor(author);
+
+
+        Article article= modelMapper.map(articleRequest, Article.class);
         Set<Category> categories = categoryRepository.findAllById(articleRequest.getCategories()).stream().collect(Collectors.toSet());
         article.setCategories(categories);
-        // Lưu bài viết vào cơ sở dữ liệu
-        return articleRs.save(article);
+
+        User author = userRepository.findById(articleRequest.getAuthor()).orElseThrow(() ->
+                new RuntimeException("Author not found"));
+        article.setAuthor(author);
+        article.setAuthor(author);
+         return articleRs.save(article);
     }
 
     @Override

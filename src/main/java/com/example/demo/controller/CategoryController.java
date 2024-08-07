@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.model.dto.ArticleRequest;
 import com.example.demo.model.dto.SeoContentRequest;
+import com.example.demo.model.entity.Article;
 import com.example.demo.model.entity.Category;
 import com.example.demo.model.entity.SeoContent;
 import com.example.demo.model.service.CategoryService;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -31,43 +35,38 @@ public class CategoryController {
     public CategoryService categoryService;
 
     @GetMapping("/category")
-    public ResponseEntity<List<Category>> getAllCategories (){
-        return ResponseEntity.ok(categoryService.getListCategories());
+    public Mono<ResponseEntity<List<Category>>> getAllCategories (){
+        return  Mono.just(ResponseEntity.ok(categoryService.getListCategories()));
     }
     @PostMapping("/category")
-    public ResponseEntity<Category> createCategories (@RequestBody Category category){
-        Category categoryResuilt = categoryService.createCategories(category);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/admin/category" + categoryResuilt.getCategoryId()));
-        return new ResponseEntity<>(categoryResuilt,httpHeaders, HttpStatus.CREATED);
+    public Mono<ResponseEntity<Category>> createCategories (@RequestBody Category category){
+        return Mono.just(ResponseEntity.ok(categoryService.createCategories(category)));
+
     }
 
-
     @PutMapping("/category/{id}")
-    public ResponseEntity<Category> updateCategories(@PathVariable Long id , @RequestBody Category category){
-        Category categoryResuilt = categoryService.updateCategories(id,category);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/seo-content/" + categoryResuilt.getCategoryId()));
-        return new ResponseEntity<>(categoryResuilt,httpHeaders,HttpStatus.CREATED);
+    public Mono<Category> updateCategories(@PathVariable Long id , @RequestBody Category category){
+         return Mono.just(categoryService.updateCategories(id,category));
+
     }
 
     @DeleteMapping("/category/{id}")
-    public ResponseEntity<?> deleteCategoriesByid(@PathVariable Long id){
+    public Mono<ResponseEntity<?>> deleteCategoriesByid(@PathVariable Long id){
         Map<String, String> response = new HashMap<>();
 
         try {
             Category category = categoryService.findCategoriesById(id);
             if(category==null){
                 response.put("message", "Categories does not exist");
-                return ResponseEntity.ok(response);
+                return Mono.just(ResponseEntity.ok(response));
             }
             categoryService.deleteCategories(id);
             response.put("message", "Categories deleted successfully");
-            return ResponseEntity.ok(response);
+            return Mono.just(ResponseEntity.ok(response));
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body("article not found"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete user");
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete article"));
         }
     }
 }

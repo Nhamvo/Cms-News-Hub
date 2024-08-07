@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -27,46 +29,43 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+
     @GetMapping("/user")
-    public ResponseEntity<List<User>> getListUsers(){
-        return ResponseEntity.ok(userService.getAllUsers());
+    public Mono<ResponseEntity<List<User>>> getListUsers(){
+        return Mono.just(ResponseEntity.ok(userService.getAllUsers()));
     }
 
 
     @PostMapping("/user")
-    public ResponseEntity<User> addUsers(@RequestBody UserRequest userRequest){
-        User userResuilt = userService.createUsers(userRequest);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/admin/user/add-users" + userResuilt.getId()));
-        return new ResponseEntity<>(userResuilt,httpHeaders,HttpStatus.CREATED);
+    public Mono<ResponseEntity<User>> addUsers(@RequestBody UserRequest userRequest){
+        return Mono.just(ResponseEntity.ok(userService.createUsers(userRequest)));
+
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUsers(@PathVariable Long id ,@RequestBody UserRequest userRequest){
-        User userResuilt = userService.updateUsers(id,userRequest);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/admin/user/update-users" + userResuilt.getId()));
-        return new ResponseEntity<>(userResuilt,httpHeaders,HttpStatus.CREATED);
+    public Mono<User> updateUsers(@PathVariable Long id ,@RequestBody UserRequest userRequest){
+        return Mono.just(userService.updateUsers(id,userRequest));
+
     }
 
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteUsersByid(@PathVariable Long id){
+    public Mono<ResponseEntity<?>> deleteUsersByid(@PathVariable Long id){
         Map<String, String> response = new HashMap<>();
 
         try {
             User userCheck = userService.findUserByid(id);
             if(userCheck==null){
                 response.put("message", "User does not exist");
-                return ResponseEntity.ok(response);
+                return Mono.just(ResponseEntity.ok(response));
             }
             userService.deleteUsers(id);
             response.put("message", "User deleted successfully");
-            return ResponseEntity.ok(response);
+            return Mono.just(ResponseEntity.ok(response));
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body("article not found"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete user");
+            return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete article"));
         }
     }
 

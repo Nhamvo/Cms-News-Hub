@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -31,44 +34,42 @@ public class ArticleController {
     public ArticleService articleService;
 
     @GetMapping("/article-manager")
-    public ResponseEntity<List<Article>> getAllArticles(){
-        return ResponseEntity.ok(articleService.getListArticle()) ;
+    public Mono<ResponseEntity<List<Article>>> getAllArticles() {
+        return Mono.just(ResponseEntity.ok(articleService.getListArticle()));
+
     }
 
     @PostMapping("/article-manager")
-    public ResponseEntity<Article> createArticle(@RequestBody ArticleRequest articleRequest){
-        Article createArticle = articleService.createArticle(articleRequest);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/editor/article-manager/"+createArticle.getId()));
-        return new ResponseEntity<>(createArticle,httpHeaders, HttpStatus.CREATED) ;
+    public Mono<ResponseEntity<Article>> createArticle(@RequestBody ArticleRequest articleRequest) {
+        return Mono.just(ResponseEntity.ok(articleService.createArticle(articleRequest)));
 
     }
 
     @PutMapping("/article-manager/{id}")
-    public ResponseEntity<Article> updateArticles(@PathVariable Long id , @RequestBody ArticleRequest articleRequest){
-        Article articleResuilt = articleService.updateArticle(id,articleRequest);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/article-manager/" + articleResuilt.getId()));
-        return new ResponseEntity<>(articleResuilt,httpHeaders,HttpStatus.CREATED);
+    public Mono<Article> updateArticles(@PathVariable Long id,
+                                        @RequestBody ArticleRequest articleRequest) {
+        return Mono.just(articleService.updateArticle(id, articleRequest));
+
     }
 
+
     @DeleteMapping("/article-manager/{id}")
-    public ResponseEntity<?> deleteCategoriesByid(@PathVariable Long id){
+    public Mono<ResponseEntity<?>> deleteCategoriesByid(@PathVariable Long id) {
         Map<String, String> response = new HashMap<>();
 
         try {
             Article article = articleService.findArticleByid(id);
-            if(article==null){
+            if (article == null) {
                 response.put("message", "article does not exist");
-                return ResponseEntity.ok(response);
+                return Mono.just(ResponseEntity.ok(response));
             }
             articleService.deleteArticle(id);
             response.put("message", "article deleted successfully");
-            return ResponseEntity.ok(response);
+             return Mono.just(ResponseEntity.ok(response));
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+             return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body("article not found"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete user");
+             return Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to delete article"));
         }
     }
 
