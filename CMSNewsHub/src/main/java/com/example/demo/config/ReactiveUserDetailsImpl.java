@@ -20,10 +20,13 @@ public class ReactiveUserDetailsImpl implements ReactiveUserDetailsService {
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         com.example.demo.model.entity.user.User users = userRepository.findByUserName(username);
+        System.out.println("User not found");
 
         return Mono.fromCallable(() -> users)
                 .map(user -> {
                     if (user == null) {
+                        System.out.println("User not found");
+
                         throw new UsernameNotFoundException("User not found");
                     }
                     String roles = user.getRoleNames();
