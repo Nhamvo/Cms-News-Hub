@@ -25,31 +25,46 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin")
+
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user")
+    @GetMapping("/public/hello")
+    public Mono<ResponseEntity<String>> publicHello() {
+        return Mono.just(ResponseEntity.ok("Đây là trang người dùng, không yêu cầu đăng nhập"));
+    }
+//
+//    @GetMapping("/private/hello")
+//    public Mono<String> privateHello() {
+//        return Mono.just("Hello, this is a private endpoint!");
+//    }
+//
+//    @GetMapping("/admin/hello")
+//    public Mono<String> adminHello() {
+//        return Mono.just("Hello, this is a admin endpoint!");
+//    }
+
+    @GetMapping("/admin/user")
     public Mono<ResponseEntity<List<User>>> getListUsers(){
         return Mono.just(ResponseEntity.ok(userService.getAllUsers()));
     }
 
 
-    @PostMapping("/user")
+    @PostMapping("/admin/user")
     public Mono<ResponseEntity<User>> addUsers(@RequestBody UserRequest userRequest){
         return Mono.just(ResponseEntity.ok(userService.createUsers(userRequest)));
 
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/admin/user/{id}")
     public Mono<User> updateUsers(@PathVariable Long id ,@RequestBody UserRequest userRequest){
         return Mono.just(userService.updateUsers(id,userRequest));
 
     }
 
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/admin/user/{id}")
     public Mono<ResponseEntity<?>> deleteUsersByid(@PathVariable Long id){
         Map<String, String> response = new HashMap<>();
 

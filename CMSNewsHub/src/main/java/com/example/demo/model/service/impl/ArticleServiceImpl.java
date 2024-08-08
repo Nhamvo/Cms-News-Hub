@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
     @Autowired
-    ArticleRepository articleRs ;
+    ArticleRepository articleRs;
     @Autowired
     CategoryRepository categoryRepository;
 
@@ -32,27 +32,23 @@ public class ArticleServiceImpl implements ArticleService {
     ModelMapper modelMapper;
 
 
-
     @Override
     public List<Article> getListArticle() {
         List<Article> a = articleRs.findAll();
-        System.out.println("test " +a.size());
+        System.out.println("test " + a.size());
         return a;
     }
 
     @Override
     public Article createArticle(ArticleRequest articleRequest) {
-
-
-        Article article= modelMapper.map(articleRequest, Article.class);
-        Set<Category> categories = categoryRepository.findAllById(articleRequest.getCategories()).stream().collect(Collectors.toSet());
+        Article article = modelMapper.map(articleRequest, Article.class);
+        Set<Category> categories = categoryRepository.findAllById(articleRequest.getCategories()).
+                stream().collect(Collectors.toSet());
         article.setCategories(categories);
-
         User author = userRepository.findById(articleRequest.getAuthor()).orElseThrow(() ->
                 new RuntimeException("Author not found"));
         article.setAuthor(author);
-        article.setAuthor(author);
-         return articleRs.save(article);
+        return articleRs.save(article);
     }
 
     @Override

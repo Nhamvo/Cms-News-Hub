@@ -1,6 +1,6 @@
 package com.example.demo.model.entity.user;
 
-import com.example.demo.model.entity.Article;
+//import com.example.demo.model.entity.Article;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name= "users")
@@ -36,6 +37,12 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    public String getRoleNames() {
+        return roles.stream()
+                .map(Role::getName)
+                .collect(Collectors.joining(", "));
+    }
 
 
 }

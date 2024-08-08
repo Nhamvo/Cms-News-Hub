@@ -15,5 +15,4 @@ public interface UserService {
     void deleteUsers(Long id);
     User findUserByid (Long id);
     User updateUsers(Long id,UserRequest user);
-//    Mono<UserDetails> findByUsername(String username) ;
 }

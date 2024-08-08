@@ -4,6 +4,7 @@ package com.example.demo.model.entity;
 import com.example.demo.model.entity.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,7 +45,7 @@ public class Article {
     private User author;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "content_categories",
             joinColumns = @JoinColumn(name = "content_id"),

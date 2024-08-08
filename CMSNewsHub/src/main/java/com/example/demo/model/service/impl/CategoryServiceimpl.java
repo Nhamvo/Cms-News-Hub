@@ -34,7 +34,6 @@ public class CategoryServiceimpl implements CategoryService {
         Category categoryNew = categoryRepository.findById(id).orElse(null);
         categoryNew.setDescription(category.getDescription());
         categoryNew.setName(category.getName());
-
         return categoryRepository.save(categoryNew);
     }
 
