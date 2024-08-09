@@ -21,6 +21,10 @@ public class BasicFilter implements WebFilter {
 
     @Override
      public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String path = exchange.getRequest().getPath().toString();
+        if (path.startsWith("/public")) {
+            return chain.filter(exchange);
+        }
         return ReactiveSecurityContextHolder.getContext()
                 .map(SecurityContext::getAuthentication)
                 .flatMap(authentication -> {
@@ -33,7 +37,6 @@ public class BasicFilter implements WebFilter {
                         Map<String, String> errorResponse = new HashMap<>();
                         errorResponse.put("error", "Unauthorized");
                         errorResponse.put("message", "You need to login to access this resource");
-
                         try {
                             return exchange.getResponse().writeWith(Mono.just(
                                     exchange.getResponse().bufferFactory().wrap(objectMapper.writeValueAsBytes(errorResponse))

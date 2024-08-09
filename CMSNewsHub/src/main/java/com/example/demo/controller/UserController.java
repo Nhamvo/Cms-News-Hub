@@ -34,16 +34,6 @@ public class UserController {
     public Mono<ResponseEntity<String>> publicHello() {
         return Mono.just(ResponseEntity.ok("Đây là trang người dùng, không yêu cầu đăng nhập"));
     }
-//
-//    @GetMapping("/private/hello")
-//    public Mono<String> privateHello() {
-//        return Mono.just("Hello, this is a private endpoint!");
-//    }
-//
-//    @GetMapping("/admin/hello")
-//    public Mono<String> adminHello() {
-//        return Mono.just("Hello, this is a admin endpoint!");
-//    }
 
     @GetMapping("/admin/user")
     public Mono<ResponseEntity<List<User>>> getListUsers(){
