@@ -9,7 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface ArticleMapper {
     ArticleMapper INSTANCE = Mappers.getMapper(ArticleMapper.class);
 
-//    @Mapping(target = "categories", ignore = true) // Chúng ta sẽ ánh xạ danh mục riêng
-//    Article articleRequestToArticle(ArticleRequest articleRequest);
 
 }

@@ -1,0 +1,19 @@
+
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ë”¼’2J$61cf7205-db5b-4dff-989e-1f3797ecaa72
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ë”¼’2J$bb0325fa-c818-4af5-b371-a8b180503166
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ë”¼’2J$6c75aea7-00e7-47f0-9194-6f869f9a8246
+›
+java:S3305"XInject this field value directly into "commandLineRunner", the only method that uses it.( ØæÒ8ë”¼’2J$1c323a7d-a64a-48fb-8ebd-a4c3ddf080e4
+›
+java:S3305"XInject this field value directly into "commandLineRunner", the only method that uses it.(Ú×‚8èóŞ’2J$97484496-4d88-4069-8f38-c7f4233e6e5e
+›
+java:S3305"XInject this field value directly into "commandLineRunner", the only method that uses it.(´µ³İ8ì”¼’2J$19174abc-8ab6-42cc-b54a-76ef9ccb9bbc
+x
+java:S6437'"6Revoke and change this password, as it is compromised.(Ä©ø8ğ”¼’2J$e9f58ed1-9fae-4b3c-84c1-163165e678fc
+x
+java:S6437."6Revoke and change this password, as it is compromised.(Ä©ø8ñ”¼’2J$e27d0105-a8f7-4d6c-9d82-da51ec7b3528
+p
+java:S1128".Remove this unused import 'java.util.HashSet'.(Ê‚êX8³™Ó’2J$5ea3f42d-b5d4-47f0-a3bc-c59d0c718c71

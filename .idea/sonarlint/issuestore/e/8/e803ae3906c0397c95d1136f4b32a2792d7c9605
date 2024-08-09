@@ -1,0 +1,19 @@
+
+µ
+java:S1488R"mImmediately return this expression instead of assigning it to the temporary variable "bCryptPasswordEncoder".(µ–Çµüÿÿÿÿ8ñ‰í’2J$e7611f82-bfc9-49cc-9fa0-a4ef9d2ab103
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ú‰í’2J$a98d0b84-341c-46d1-bc34-7bc52377fe00
+£
+java:S3305"`Inject this field value directly into "persistentTokenRepository", the only method that uses it.(²ğ²İ8û‰í’2J$845a3cdf-d7aa-4da2-b628-0d8f2e4864da
+
+java:S1874!"9Remove this use of "authorizeRequests"; it is deprecated.(©ËÅÂúÿÿÿÿ8ı‰í’2J$60a39848-9114-4b13-ae0c-7c994329f18f
+Ä
+java:S1128	"€Remove this unused import 'org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder'.(£ØÓ‰8‚Ší’2J$af6ad076-799e-4c62-992d-4274b50d5125
+’
+java:S1128"ORemove this unused import 'org.springframework.security.core.userdetails.User'.(–Ä€8‚Ší’2J$f8f49aac-bec9-4da7-9d68-b98ca69e3ec6
+™
+java:S1128"VRemove this unused import 'org.springframework.security.core.userdetails.UserDetails'.(ÊÁ¥8ƒŠí’2J$5b9f7221-f1df-4ebc-8a5a-008421c1d17d
+ 
+java:S1128"]Remove this unused import 'org.springframework.security.core.userdetails.UserDetailsService'.(¶…¥à8ƒŠí’2J$18df214e-a100-40ed-9bad-159eb3602e0c
+©
+java:S1128"aRemove this unused import 'org.springframework.security.provisioning.InMemoryUserDetailsManager'.(îŒúùÿÿÿÿ8ƒŠí’2J$5bf9094c-4458-4396-98d3-13347dad2ccc
