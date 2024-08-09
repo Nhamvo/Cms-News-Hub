@@ -41,7 +41,7 @@ public class BasicFilter implements WebFilter {
                             return exchange.getResponse().writeWith(Mono.just(
                                     exchange.getResponse().bufferFactory().wrap(objectMapper.writeValueAsBytes(errorResponse))
                             ));
-                        } catch (JsonProcessingException e) {
+                         } catch (JsonProcessingException e) {
                             return Mono.error(e);
                         }
                     }

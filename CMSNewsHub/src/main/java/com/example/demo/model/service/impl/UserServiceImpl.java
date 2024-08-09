@@ -9,6 +9,7 @@ import com.example.demo.model.repository.RoleRepository;
 import com.example.demo.model.repository.UserRepository;
 import com.example.demo.model.service.UserService;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    ModelMapper modelMapper;
 
 
     @Autowired
@@ -45,14 +48,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUsers(UserRequest userRequest) {
         String encodedPassword = passwordEncoder.encode(userRequest.getPassWord());
-
-        User newUser = new User();
-        newUser.setUserName(userRequest.getUserName());
-        newUser.setEmail(userRequest.getUserName());
-
-        newUser.setPassWord(encodedPassword);
+        User newUser = modelMapper.map(userRequest,User.class);
         Set<Role> roles = roleRepository.findAllById(userRequest.getRoles()).stream().collect(Collectors.toSet());
         newUser.setRoles(roles);
+        newUser.setPassWord(encodedPassword);
         return userRepository.save(newUser);
     }
 
@@ -69,36 +68,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUsers(Long id, UserRequest user) {
-        User userResuilt = userRepository.findById(id).orElse(null);
-        userResuilt.setUserName(user.getUserName());
-        userResuilt.setEmail(user.getEmail());
-        String encodedPassword = passwordEncoder.encode(user.getPassWord());
+    public User updateUsers(Long id, UserRequest userRequest) {
+         User userResuilt = userRepository.findById(id).orElse(null);
+        String encodedPassword = passwordEncoder.encode(userResuilt.getPassWord());
+        modelMapper.map(userRequest,userResuilt);
         userResuilt.setPassWord(encodedPassword);
-        Set<Role> roles = roleRepository.findAllById(user.getRoles()).stream().collect(Collectors.toSet());
+        Set<Role> roles = roleRepository.findAllById(userRequest.getRoles()).stream().collect(Collectors.toSet());
         userResuilt.setRoles(roles);
         return userRepository.save(userResuilt);
     }
 
-    ///////
-    @Transactional
-    public UserDetails loadUserByUsername(String username) {
-        User user = userRepository.findByUserName(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        // Chuyển đổi các vai trò thành SimpleGrantedAuthority
-        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
-
-        // Trả về đối tượng UserDetails
-        return org.springframework.security.core.userdetails.User.withUsername(user.getUserName())
-                .password(user.getPassWord())
-                .authorities(authorities)
-                .build();
-    }
+//    @Transactional
+//    public UserDetails loadUserByUsername(String username) {
+//        User user = userRepository.findByUserName(username);
+//        if (user == null) {
+//            throw new UsernameNotFoundException("User not found");
+//        }
+//
+//        // Chuyển đổi các vai trò thành SimpleGrantedAuthority
+//        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+//                .map(role -> new SimpleGrantedAuthority(role.getName()))
+//                .collect(Collectors.toList());
+//
+//        // Trả về đối tượng UserDetails
+//        return org.springframework.security.core.userdetails.User.withUsername(user.getUserName())
+//                .password(user.getPassWord())
+//                .authorities(authorities)
+//                .build();
+//    }
 
 
 }

@@ -32,6 +32,7 @@ public class ArticleServiceImpl implements ArticleService {
     ModelMapper modelMapper;
 
 
+
     @Override
     public List<Article> getListArticle() {
         List<Article> a = articleRs.findAll();
@@ -59,7 +60,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article updateArticle(Long id, ArticleRequest articleRequest) {
+
         Article article = articleRs.findById(id).orElse(null);
+
         article.setTitle(articleRequest.getTitle());
         article.setContent(articleRequest.getContent());
         User author = userRepository.findById(articleRequest.getAuthor()).orElseThrow(() -> new RuntimeException("Author not found"));

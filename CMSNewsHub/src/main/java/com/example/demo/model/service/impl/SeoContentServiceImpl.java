@@ -7,6 +7,7 @@ import com.example.demo.model.entity.SeoContent;
 import com.example.demo.model.repository.ArticleRepository;
 import com.example.demo.model.repository.SeoContentRepository;
 import com.example.demo.model.service.SeoContentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,10 @@ public class SeoContentServiceImpl implements SeoContentService {
     @Autowired
     private ArticleRepository articleRepository;
 
+    @Autowired
+    ModelMapper modelMapper;
+
+
     @Override
     public List<SeoContent> getListSeoContent() {
         return seoContentRepository.findAll();
@@ -27,11 +32,8 @@ public class SeoContentServiceImpl implements SeoContentService {
     @Override
     public SeoContent createSeoContents(SeoContentRequest seoContentRequest) {
         Article article = articleRepository.findById(seoContentRequest.getArticle()).orElse(null);
-        SeoContent seoContent =new SeoContent();
-        seoContent.setMetaKeywords(seoContentRequest.getMetaKeywords());
-        seoContent.setMetaTitle(seoContent.getMetaTitle());
+        SeoContent seoContent =modelMapper.map(seoContentRequest,SeoContent.class);
         seoContent.setArticle(article);
-        seoContent.setMetaDescription(seoContentRequest.getMetaDescription());
         return seoContentRepository.save(seoContent);
     }
 
@@ -40,12 +42,11 @@ public class SeoContentServiceImpl implements SeoContentService {
         seoContentRepository.deleteById(id);
     }
 
+
     @Override
     public SeoContent updateSeoContents(Long id, SeoContentRequest seoContentRequest) {
-        SeoContent seoContentResuilt = seoContentRepository.findById(id).orElse(null);
-        seoContentResuilt.setMetaDescription(seoContentRequest.getMetaDescription());
-        seoContentResuilt.setMetaKeywords(seoContentRequest.getMetaKeywords());
-        seoContentResuilt.setMetaTitle(seoContentRequest.getMetaTitle());
+         SeoContent seoContentResuilt = seoContentRepository.findById(id).orElse(null);
+        modelMapper.map(seoContentRequest,seoContentResuilt);
         Article article = articleRepository.findById(seoContentRequest.getArticle()).orElse(null);
         seoContentResuilt.setArticle(article);
         return seoContentRepository.save(seoContentResuilt);

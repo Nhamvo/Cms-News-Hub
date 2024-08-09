@@ -24,7 +24,7 @@ import java.util.Set;
 @Data
 public class UserRequest {
 
-    private Long id;
+
 
      private String userName ;
 

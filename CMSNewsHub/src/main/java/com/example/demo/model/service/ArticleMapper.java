@@ -7,7 +7,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 @Mapper
 public interface ArticleMapper {
-    ArticleMapper INSTANCE = Mappers.getMapper(ArticleMapper.class);
+//    ArticleMapper INSTANCE = Mappers.getMapper(ArticleMapper.class);
+
 
 
 }
