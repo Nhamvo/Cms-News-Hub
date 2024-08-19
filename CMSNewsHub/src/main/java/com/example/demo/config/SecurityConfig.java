@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 import reactor.core.publisher.Mono;
@@ -40,7 +41,7 @@ public class SecurityConfig {
                     Map<String, String> result = new HashMap<>();
                     result.put("message", "Login successful");
                     String roles = authentication.getAuthorities().stream()
-                            .map(grantedAuthority -> grantedAuthority.getAuthority())
+                            .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.joining(", "));
                     result.put("role", roles);
                     exchange.getResponse().setStatusCode(HttpStatus.OK);

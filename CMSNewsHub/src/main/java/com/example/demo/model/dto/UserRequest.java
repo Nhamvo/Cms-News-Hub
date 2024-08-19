@@ -24,8 +24,6 @@ import java.util.Set;
 @Data
 public class UserRequest {
 
-
-
      private String userName ;
 
     private String passWord;

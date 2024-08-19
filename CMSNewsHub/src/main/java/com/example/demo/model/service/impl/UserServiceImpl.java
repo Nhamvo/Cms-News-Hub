@@ -1,6 +1,7 @@
 package com.example.demo.model.service.impl;
 
 //import com.example.demo.config.SecurityConfig;
+
 import com.example.demo.model.dto.UserRequest;
 //import com.example.demo.model.entity.Category;
 import com.example.demo.model.entity.user.Role;
@@ -38,7 +39,6 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
-
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUsers(UserRequest userRequest) {
         String encodedPassword = passwordEncoder.encode(userRequest.getPassWord());
-        User newUser = modelMapper.map(userRequest,User.class);
+        User newUser = modelMapper.map(userRequest, User.class);
         Set<Role> roles = roleRepository.findAllById(userRequest.getRoles()).stream().collect(Collectors.toSet());
         newUser.setRoles(roles);
         newUser.setPassWord(encodedPassword);
@@ -57,8 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUsers(Long id) {
-    userRepository.deleteById(id);
-
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -69,33 +68,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUsers(Long id, UserRequest userRequest) {
-         User userResuilt = userRepository.findById(id).orElse(null);
-        String encodedPassword = passwordEncoder.encode(userResuilt.getPassWord());
-        modelMapper.map(userRequest,userResuilt);
+        User userResuilt = userRepository.findById(id).orElse(null);
+        String encodedPassword = passwordEncoder.encode(userRequest.getPassWord());
+        modelMapper.map(userRequest, userResuilt);
         userResuilt.setPassWord(encodedPassword);
         Set<Role> roles = roleRepository.findAllById(userRequest.getRoles()).stream().collect(Collectors.toSet());
         userResuilt.setRoles(roles);
         return userRepository.save(userResuilt);
     }
-
-//    @Transactional
-//    public UserDetails loadUserByUsername(String username) {
-//        User user = userRepository.findByUserName(username);
-//        if (user == null) {
-//            throw new UsernameNotFoundException("User not found");
-//        }
-//
-//        // Chuyển đổi các vai trò thành SimpleGrantedAuthority
-//        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName()))
-//                .collect(Collectors.toList());
-//
-//        // Trả về đối tượng UserDetails
-//        return org.springframework.security.core.userdetails.User.withUsername(user.getUserName())
-//                .password(user.getPassWord())
-//                .authorities(authorities)
-//                .build();
-//    }
 
 
 }
