@@ -2,22 +2,17 @@ package com.example.demo.model.service.impl;
 
 //import com.example.demo.config.SecurityConfig;
 
-import com.example.demo.model.dto.UserRequest;
+import com.example.demo.controller.request.UserRequest;
 //import com.example.demo.model.entity.Category;
 import com.example.demo.model.entity.user.Role;
 import com.example.demo.model.entity.user.User;
 import com.example.demo.model.repository.RoleRepository;
 import com.example.demo.model.repository.UserRepository;
 import com.example.demo.model.service.UserService;
-import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Set;

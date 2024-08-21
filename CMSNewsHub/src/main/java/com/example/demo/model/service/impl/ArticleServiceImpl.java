@@ -1,7 +1,7 @@
 package com.example.demo.model.service.impl;
 
 
-import com.example.demo.model.dto.ArticleRequest;
+import com.example.demo.controller.request.ArticleRequest;
 import com.example.demo.model.entity.Article;
 import com.example.demo.model.entity.Category;
 import com.example.demo.model.entity.user.User;
@@ -35,9 +35,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> getListArticle() {
-        List<Article> a = articleRs.findAll();
-        System.out.println("test " + a.size());
-        return a;
+        return articleRs.findAll();
     }
 
     @Override
@@ -46,6 +44,8 @@ public class ArticleServiceImpl implements ArticleService {
         Set<Category> categories = categoryRepository.findAllById(articleRequest.getCategories()).
                 stream().collect(Collectors.toSet());
         article.setCategories(categories);
+        article.setView(1);
+
         User author = userRepository.findById(articleRequest.getAuthor()).orElseThrow(() ->
                 new RuntimeException("Author not found"));
         article.setAuthor(author);
@@ -55,18 +55,18 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void deleteArticle(Long id) {
         articleRs.deleteById(id);
-
     }
 
     @Override
     public Article updateArticle(Long id, ArticleRequest articleRequest) {
 
-        Article article = articleRs.findById(id).orElse(null);
 
-        article.setTitle(articleRequest.getTitle());
-        article.setContent(articleRequest.getContent());
+        Article article = articleRs.findById(id).orElse(null);
+        modelMapper.map(articleRequest,article);
         User author = userRepository.findById(articleRequest.getAuthor()).orElseThrow(() -> new RuntimeException("Author not found"));
         article.setAuthor(author);
+        article.setView(1);
+        article.setLastEditedBy(author);
         Set<Category> categories = categoryRepository.findAllById(articleRequest.getCategories()).stream().collect(Collectors.toSet());
         article.setCategories(categories);
         articleRs.save(article);
@@ -77,4 +77,11 @@ public class ArticleServiceImpl implements ArticleService {
     public Article findArticleByid(Long id) {
         return articleRs.findById(id).orElse(null);
     }
+
+//    public User getCurrentUser() {
+//        BasicFilter basicFilter = new BasicFilter();
+//        Mono<String> monoUser = basicFilter.getCurrentUser();
+//        System.out.printf("ffffffffff"+ monoUser.toString());
+//        return monoUser.toFuture().join();
+//    }
 }

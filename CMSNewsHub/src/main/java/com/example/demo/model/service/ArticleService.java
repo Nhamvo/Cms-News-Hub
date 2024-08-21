@@ -1,9 +1,8 @@
 package com.example.demo.model.service;
 
 
-import com.example.demo.model.dto.ArticleRequest;
+import com.example.demo.controller.request.ArticleRequest;
 import com.example.demo.model.entity.Article;
-import com.example.demo.model.entity.Category;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

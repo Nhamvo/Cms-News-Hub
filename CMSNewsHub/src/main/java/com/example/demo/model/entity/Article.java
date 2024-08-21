@@ -2,23 +2,14 @@ package com.example.demo.model.entity;
 
 
 import com.example.demo.model.entity.user.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -29,7 +20,7 @@ import java.util.Set;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String title;
@@ -39,9 +30,35 @@ public class Article {
 
     @Column
     private LocalDateTime publishedAt;
+    //// new add
+    @Column
+    private String summary;
+
+    @Column
+    private String tag;
+
+    @Column
+    private LocalDateTime lastModifiedDate;
 
     @ManyToOne
-    @JoinColumn(name = "author_id" , referencedColumnName = "id")
+    @JoinColumn(name = "last_edited_by_id", referencedColumnName = "id")
+    private User lastEditedBy;
+
+    @Column
+    private String slug;
+
+    @Column
+    private String featuredImage;
+
+    @Column
+    private Integer view = 0;
+
+    @Column
+    private Integer status;
+
+    //
+    @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
 
 
@@ -52,6 +69,11 @@ public class Article {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories;
+
+
+
+    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER)
+    private List<Comment> comments;
 
     @PrePersist
     protected void onCreate() {

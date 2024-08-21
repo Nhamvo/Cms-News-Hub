@@ -1,7 +1,6 @@
 package com.example.demo.model.service;
 
-import com.example.demo.model.dto.SeoContentRequest;
-import com.example.demo.model.entity.Category;
+import com.example.demo.controller.request.SeoContentRequest;
 import com.example.demo.model.entity.SeoContent;
 import org.springframework.stereotype.Service;
 

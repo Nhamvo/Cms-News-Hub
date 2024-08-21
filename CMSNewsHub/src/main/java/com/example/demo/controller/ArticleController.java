@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
 
-import com.example.demo.model.dto.ArticleRequest;
+import com.example.demo.config.ReactiveUserDetailsImpl;
+import com.example.demo.controller.request.ArticleRequest;
 import com.example.demo.model.entity.Article;
 import com.example.demo.model.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,20 @@ import java.util.Map;
 public class ArticleController {
     @Autowired
     public ArticleService articleService;
+    ReactiveUserDetailsImpl reactiveUserDetails = new ReactiveUserDetailsImpl();
+
+
 
     @GetMapping("/article-manager")
     public Mono<ResponseEntity<List<Article>>> getAllArticles() {
+
         return Mono.just(ResponseEntity.ok(articleService.getListArticle()));
 
+    }
+
+    @GetMapping("/article-manager/{id}")
+    public Mono<ResponseEntity<Article>> getArticlesById(@PathVariable Long id) {
+        return Mono.just(ResponseEntity.ok(articleService.findArticleByid(id)));
     }
 
     @PostMapping("/article-manager")

@@ -1,6 +1,7 @@
 package com.example.demo.model.entity.user;
 
 //import com.example.demo.model.entity.Article;
+import com.example.demo.model.entity.SavedArticle;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+   @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+   private Set<SavedArticle> savedArticles;
+
 
     public String getRoleNames() {
         return roles.stream()
