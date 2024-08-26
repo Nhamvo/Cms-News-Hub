@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 @Data
 public class CommentDTO {
     private Long idComment;
+    private Long idUser;
+    private Long idArticle;
     private String comment;
     private Integer rating;
     private LocalDateTime commentDate;
-    private Long idUser;
     private String username; // Tên của User
-    private Long idArticle;
     private String articleTitle; // Tiêu đề của bài viết
 
 }

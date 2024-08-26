@@ -38,9 +38,14 @@ public class SavedArticleServiceImpl implements SavedArticleService {
         SavedArticle savedArticle = modelMapper.map(savedArticleRequest, SavedArticle.class);
         Article article = articleRepository.findById(savedArticleRequest.getArticle()).orElse(null);
         User user = userRepository.findById(savedArticleRequest.getUser()).orElse(null);
-        savedArticle.setArticle(article);
-        savedArticle.setUser(user);
-        return savedArticleRepository.save(savedArticle);
+        boolean exists = savedArticleRepository.existsByUserAndArticle(user, article);
+        if (exists) {
+            throw new RuntimeException("Bài viết đã được lưu trước đó.");
+        }
+            savedArticle.setArticle(article);
+            savedArticle.setUser(user);
+            return savedArticleRepository.save(savedArticle);
+
     }
 
 }

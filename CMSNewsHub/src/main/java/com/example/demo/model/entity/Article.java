@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "articles")
+
+
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

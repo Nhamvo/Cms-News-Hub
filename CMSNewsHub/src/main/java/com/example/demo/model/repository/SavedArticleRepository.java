@@ -2,7 +2,9 @@ package com.example.demo.model.repository;
 
 
 import com.example.demo.model.dto.SavedArticleDTO;
+import com.example.demo.model.entity.Article;
 import com.example.demo.model.entity.SavedArticle;
+import com.example.demo.model.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,5 +19,6 @@ public interface SavedArticleRepository extends JpaRepository<SavedArticle , Lon
             "from SavedArticle s where s.user.id=:id")
     List<SavedArticleDTO> findAllSavedArticleByUserId(Long id);
 
+    boolean existsByUserAndArticle(User user, Article article);
 
 }

@@ -18,16 +18,16 @@ public interface CommentRepository extends JpaRepository<Comment,Long>, JpaSpeci
 
 
     @Query( value = """
-            select new com.example.demo.model.dto.CommentDTO(c.id,c.comment, c.rating,c.commentDate,
-             c.user.id, c.user.userName, c.article.id,c.article.title) 
+            select new com.example.demo.model.dto.CommentDTO(c.id, c.user.id,c.article.id,
+            c.comment, c.rating,c.commentDate,c.user.userName, c.article.title) 
             from Comment c where c.user.id =:id
             """)
     List<CommentDTO> findAllByUserId(Long id);
 
 
     @Query( value = """
-            select new com.example.demo.model.dto.CommentDTO(c.id,c.comment, c.rating,c.commentDate,
-             c.user.id, c.user.userName, c.article.id,c.article.title) 
+            select new com.example.demo.model.dto.CommentDTO(c.id, c.user.id,c.article.id,
+            c.comment, c.rating,c.commentDate,c.user.userName, c.article.title)
             from Comment c where c.article.id =:id
             """)
     List<CommentDTO> findAllByArticleId(Long id);
